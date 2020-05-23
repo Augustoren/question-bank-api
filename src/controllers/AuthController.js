@@ -20,6 +20,6 @@ module.exports = {
 
     const token = await user.generateAuthToken();
 
-    return res.header("x-auth-token", token).send(token);
+    return res.header("x-auth-token", token).status(204).send();
   },
 };

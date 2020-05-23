@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 module.exports = {
   async create(req, res) {
     const { error } = validateUser(req.body);
-    if (error) res.status(400).send(error.details[0].message);
+    if (error) return res.status(400).send(error.details[0].message);
 
     const user = new User(_.pick(req.body, ["name", "email", "password"]));
     const salt = await bcrypt.genSalt(10);
@@ -17,5 +17,9 @@ module.exports = {
     } catch (err) {
       return res.status(400).send(err.message);
     }
+  },
+  async list(req, res) {
+    const users = await User.find(req.query);
+    return res.send(users.map((user) => _.pick(user, ["name", "email"])));
   },
 };
